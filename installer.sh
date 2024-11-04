@@ -15,7 +15,7 @@ get_timestamp() {
   date +"%d%b%Y_%H:%M:%S-%p"
 }
 
-project="C-Lab" # Main folder for storage of downloads
+project="E-Lab" # Main folder for storage of downloads
 folder="$HOME/$project" # Path to project folder where downloads will go
 logg="$folder/install_log" # Log used to record where programs are stored
 git_folder="$folder/GitHub" # Folder used to store GitHub repos
@@ -117,58 +117,20 @@ cd $git_folder
 # Download the following gitlab repos:
 repo_urls=(
 # List of GitLab reps urls:
-"https://github.com/yen5004/1-liner-ls--la-.git"
-"https://github.com/yen5004/ZIP_TAR.git"
-"https://github.com/yen5004/Encrypt_Decrypt.git"
-"https://github.com/yen5004/Encode_Decode.git"
-"https://github.com/yen5004/EICAR.git"
-"https://github.com/yen5004/THM_BashScripting.git"
-"https://github.com/yen5004/THM_ToolBox-Vim.git"
-"https://github.com/yen5004/THM_AV_Evasion-Shellcode.git"
-"https://github.com/yen5004/Hash_Hash.git"
-"https://github.com/yen5004/SCP_file_sender.git"
-"https://github.com/yen5004/tmux_quad_screen_user_input.git"
-"https://github.com/yen5004/tmux_script.git"
-"https://github.com/nyxgeek/bashscan.git"
-"https://github.com/yen5004/Bash-Oneliner.git"
-"https://github.com/dafthack/SharpUp.git"
-"https://github.com/Hack-the-box/PowerShellMafia.git"
-"https://github.com/dafthack/HostRecon.git"
-"https://github.com/dafthack/RDPSpray.git"
-"https://github.com/dafthack/Misc-Powershell-Scripts.git"
 "https://github.com/frizb/MSF-Venom-Cheatsheet.git"
 "https://github.com/swisskyrepo/PayloadsAllTheThings.git"
-"https://github.com/initstring/uptux.git"
-"https://github.com/Hack-the-box/unicorn.git"
 "https://github.com/andrewjkerr/security-cheatsheets.git"
-"https://github.com/yen5004/DevMal_U.git"
-"https://github.com/yen5004/1-liner-keep-alive.git"
-"https://github.com/0x09AL/RdpThief.git"
-"https://github.com/yen5004/updog.git"
-"https://github.com/Ciphey/Ciphey.git"
 "https://github.com/cheat/cheat.git"
-"https://github.com/gchq/CyberChef.git"
-"https://github.com/burrowers/garble.git"
-"https://github.com/tanabe/markdown-live-preview.git"
-"https://github.com/securisec/chepy.git"
 "https://github.com/itm4n/PrivescCheck.git"
-"https://github.com/topotam/PetitPotam.git"
 "https://github.com/peass-ng/PEASS-ng.git"
 "https://github.com/MWR-CyberSec/PXEThief.git"
-"https://github.com/yen5004/GitLab_help.git"
-"https://github.com/yen5004/MagicNumbers.git"
-"https://github.com/yck1509/ConfuserEx.git"
 "https://github.com/tmux-plugins/tmux-logging.git"
-"https://github.com/Orange-Cyberdefense/ocd-mindmaps.git"
-"https://github.com/yen5004/SCRIPTS.git"
-"https://github.com/yen5004/More_dots.git"
 "https://github.com/yen5004/cheat_helper.git"
-"https://github.com/yen5004/Bash-Oneliner.git"
-"https://github.com/TheWover/donut.git"
-"https://github.com/optiv/Freeze.git"
 "https://github.com/tmux-plugins/tpm.git"
 "https://github.com/tmux-plugins/list.git"
-""
+"https://github.com/SnaffCon/Snaffler.git"
+"https://github.com/0dayCTF/reverse-shell-generator.git"
+"https://github.com/sc0tfree/updog.git"
 ""
 )
 
