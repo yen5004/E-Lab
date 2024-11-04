@@ -1,10 +1,10 @@
 #!/bin/bash
 #Helper script to assist in loading of github repos and setting up kits
 
-#relevant files will be stored here
+#Relevant files will be stored here
 sudo ls # get sudo before we start
 echo "Clearing screen before we start..."
-sleep .5 && clear
+sleep 2 && clear
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Declare variables
@@ -27,6 +27,7 @@ if [ ! -d "$folder" ]; then
   echo "$project folder not found. Creating..."
   mkdir "$folder"
   echo "$project folder created successfully. - $(get_timestamp)" | tee -a $logg
+  echo "$project folder located here: " ls -la | grep $folder
 else  
   echo "$project folder already exists. - $(get_timestamp)" | tee -a $logg
 fi
@@ -166,53 +167,27 @@ echo "Tmux-logging plugin installed - $(get_timestamp)" | tee -a $logg
 
 
 # Special install for CyberChef:
-if ! command -v Cyberchef >/dev/null 2>&1; then
-    echo "Cyberchef not found. Installing ..."
-    cd $git_folder && sudo chmod 777 CyberChef && cd CyberChef
-    sudo npm install
-    echo "export NODE_OPTIONS=--max_old_space_size=2048" >> ~/.bashrc
-    source ~/.bashrc  # Reload the .bashrc
-    echo "Installed CyberChef at: $PWD - $(get_timestamp)" | tee -a $logg
-    cd $git_folder
-else
-    echo "CyberChef is already installed - $(get_timestamp)" | tee -a $logg
-    cd $git_folder
-fi
-
-# Special install for mardkdown_live_preview:
-if ! command -v markdown-live-preview >/dev/null 2>&1; then
-    echo "markdown-live-preview not found. Installing ..."
-    cd $git_folder
-    cd markdown-live-preview && sudo chmod 777 markdown-live-preview
-    make setup && make build
-    echo "Installed markdown_live_preview at: $PWD - $(get_timestamp)" | tee -a $logg
-else
-    echo "markdown-live-preview is already installed - $(get_timestamp)" | tee -a $logg
-    cd $git_folder
-fi
-
-# Special install for pe-bear:
-if ! command -v pe-bear >/dev/null 2>&1; then
-    echo "pe-bear not found. Installing ..."
-    cd $git_folder
-    sudo git clone --recursive https://github.com/hasherezade/pe-bear.git && echo "sudo git clone https://github.com/hasherezade/pe-bear.git - $(get_timestamp)" | tee -a $logg
-    sudo chmod 777 pe-bear && cd $git_folder/pe-bear
-    ./build_qt6.sh
-    echo "Installed pe-bear at: $PWD - $(get_timestamp)" | tee -a $logg
-    cd $git_folder
-else
-    echo "pe-bear is already installed - $(get_timestamp)" | tee -a $logg
-    cd $git_folder
-fi
+#if ! command -v Cyberchef >/dev/null 2>&1; then
+#    echo "Cyberchef not found. Installing ..."
+#    cd $git_folder && sudo chmod 777 CyberChef && cd CyberChef
+#    sudo npm install
+#    echo "export NODE_OPTIONS=--max_old_space_size=2048" >> ~/.bashrc
+#    source ~/.bashrc  # Reload the .bashrc
+#    echo "Installed CyberChef at: $PWD - $(get_timestamp)" | tee -a $logg
+##    cd $git_folder
+#else
+#    echo "CyberChef is already installed - $(get_timestamp)" | tee -a $logg
+#    cd $git_folder
+#fi
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Python installs
 
 # Start  python install of Ciphey
-cd $git_folder
-python3 -m pip install ciphey --upgrade
-echo "Installed Ciphey - $(get_timestamp)" | tee -a $logg
-cd $git_folder
+#cd $git_folder
+#python3 -m pip install ciphey --upgrade
+#echo "Installed Ciphey - $(get_timestamp)" | tee -a $logg
+#cd $git_folder
 
 # Start python install of updog
 cd $git_folder
@@ -220,30 +195,6 @@ pip3 install updog
 echo "Installed updog - $(get_timestamp)" | tee -a $logg
 cd $git_folder
 
-#Start python install of PXEThief
-cd $git_folder && sudo chmod 777 PXEThief
-cd PXEThief
-pip install -r requirements.txt
-echo "Installed PXEThief at: $PWD  - $(get_timestamp)" | tee -a $logg
-cd $git_folder
-
-# Special install for Chepy:
-cd $git_folder && sudo chmod 777 chepy
-cd chepy
-pip3 install -e
-pip install .
-pip install pyinstaller
-pyinstaller cli.py --name chepy --onefile
-echo "Installed Chepy at: $PWD - $(get_timestamp)" | tee -a $logg
-cd $git_folder
-
-# Special install for donut:
-cd $git_folder && sudo chmod 777 donut
-cd donut
-pip3 install .
-pip install donut-shellcode
-echo "Installed donut at: $PWD - $(get_timestamp)" | tee -a $logg
-cd $git_folder
 
 
 
@@ -251,77 +202,19 @@ cd $git_folder
 # Golang installs:
 
 # Special install for ScareCrow:
-echo "Start ScareCrow install"
-cd $git_folder
-# Re-stating variable" go_folder="$folder/Golang_folder"
+#echo "Start ScareCrow install"
+#cd $git_folder
+## Re-stating variable" go_folder="$folder/Golang_folder"
 #check to see if "Golang_folder" folder exisits in $git_folder and if not creates one
-if [ ! -d "go_folder" ]; then
-	echo "Golang_folder not found. Creating..."
-	sudo mkdir -p "$go_folder" && sudo chmod 777 "$go_folder" && cd "$go_folder" || exit 1
-	echo "Golang_folder created at: $PWD - $(get_timestamp)" | tee -a $logg
- 	cd $gofolder
-else
-	echo "Golang_folder already exists at: $PWD - $(get_timestamp)" | tee -a $logg
- 	cd $gofolder
-fi
-
-sudo git clone https://github.com/Tylous/ScareCrow.git
-sudo chmod 777 "$go_folder/ScareCrow"
-cd "$go_folder"
-
-#Add the following lines to ~/.bashrc file:
-echo "export GOROOT=/usr/lib/go" >> ~/.bashrc
-echo "export GOPATH=$HOME/go" >> ~/.bashrc
-echo "export PATH=$GOPATH/bin:$GOROOT/bin:$PATH" >> ~/.bashrc
-source ~/.bashrc # Reload the .bashrc
-
-# Initialize the module (if not already initialized)
-#go_folder="$folder/Golang_folder"
-cd "$go_folder"
-go mod init "$go_folder"
-
-# Install Golang dependencies & compile
-go get github.com/fatih/color && echo "Installed Golang dependencies for /faith/color - $(get_timestamp)" | tee -a $logg
-go get github.com/yeka/zip && echo "Installed Golang dependencies for /yeka/zip - $(get_timestamp)" | tee -a $logg
-go get github.com/josephspurrier/goversioninfo && echo "Installed Golang dependencies for /josephspurrier/goversioninfo - $(get_timestamp)" | tee -a $logg
-go get github.com/Binject/debug/pe && echo "Installed Golang dependencies for /Binject/debug/pe - $(get_timestamp)" | tee -a $logg
-go get github.com/awgh/rawreader && echo "Installed Golang dependencies for /awgh/rawreader - $(get_timestamp)" | tee -a $logg
-curl https://github.com/mvdan/garble/releases/download/v1.3.0/garble_linux_amhttps://github.com/mvdan/garble/releases/download/v1.3.0/garble_linx_amd64.tar.gz | tar xzf -
-sudo mv garble /usr/local/bin/ # or similar for your system
-
-go get mvdan.cc/garble@latest && echo "Installed Golang dependencies for /garble@latest - $(get_timestamp)" | tee -a $logg
-
-# Create test program go Golang
-#new code:
-cat << 'EOF' > HelloWorld_Go_Test.go
-package main
-import (
-	"fmt"
-	"github.com/fatih/color"
-)
-func main() {
-	c := color.New(color.FgGreen).Add(color.Bold)
-	c.Println(GOlang install sucessful! Hello, world!")
-}
-EOF
-echo "Running test Go program.."
-sleep 2
-sudo go run HelloWorld_Go_Test.go | tee -a $logg
-
-## OG code below
-#touch HelloWorld_Go_Test.go
-#echo -e "package main\nimport \"fmt\"\nfunc main() {\n      fmt.Printf(\"GOlang install sucessful! Hello, world!\")\n}" >> HelloWorld_Go_Test.go
-
-#sudo go run HelloWorld_Go_Test.go | tee -a $logg
-#sleep 5
-
-echo "Golang install sucess! Continue with ScareCrow install - $(get_timestamp)" | tee -a $logg
-cd "$go_folder/ScareCrow"
-go build ScareCrow.go
-echo "Installed ScareCrow at: $PWD - $(get_timestamp)" | tee -a $logg
-
-# Special install for garble:
-echo "Requested go install mvdan.cc/garble@latest - $(get_timestamp)" | tee -a $logg
+#if [ ! -d "go_folder" ]; then
+#	echo "Golang_folder not found. Creating..."
+#	sudo mkdir -p "$go_folder" && sudo chmod 777 "$go_folder" && cd "$go_folder" || exit 1
+#	echo "Golang_folder created at: $PWD - $(get_timestamp)" | tee -a $logg
+# 	cd $gofolder
+#else
+#	echo "Golang_folder already exists at: $PWD - $(get_timestamp)" | tee -a $logg
+# 	cd $gofolder
+#fi
 
 # Special install for Flamingo:
 cd $git_folder
@@ -330,12 +223,6 @@ go get -u -v github.com/atredispartners/flamingo
 go install -v github.com/atredispartners/flamingo
 echo "Installed Flamingo at: $git_folder/flamingo - $(get_timestamp)" | tee -a $logg
 
-# Special install for Freeze:
-cd $git_folder
-sudo chmod 777 Freeze && cd Freeze
-go build Freeze.go
-echo "Installed Freeze at: $PWD - $(get_timestamp)" | tee -a $logg
-cd $git_folder
 
 ###############################
 # Install command logger
