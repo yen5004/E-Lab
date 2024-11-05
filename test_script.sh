@@ -289,4 +289,30 @@ sudo chmod 777 personal_cheatsheets.sh
 echo "Installed 'personal_cheatsheets.sh' at: $PWD - $(get_timestamp)" | tee -a $logg
 cd $git_folder
 
+################
+# Define variables for directories and repositories
+CHEAT_REPO="~/$git_folder/security-cheatsheets"
+CHEAT_DIR="$HOME/cheatsheets"  # You can change this path as needed
+#/usr/local/bin/cheat
+
+echo " this is CHEAT_REPO: "
+ls -la ~/$git_folder |  grep CHEAP_REPO
+
+echo " this is CHEAT_DIR: "
+ls -la $HOME |  grep CHEAP_DIR
+
+echo "trying to find cheat location: "
+ls -la /usr/local/bin | grep cheat
+
+echo "what is inside cheat folder /usr/local/bin/cheat "
+ls -la /user/local/bin/cheat
+
+
+
+
+
+
+
+
+
 echo "Install completed - $(get_timestamp)" | tee -a $logg
