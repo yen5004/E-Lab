@@ -307,6 +307,58 @@ ls -la /usr/local/bin | grep cheat
 echo "what is inside cheat folder /usr/local/bin/cheat "
 ls -la /user/local/bin/cheat
 
+#!/bin/bash
+
+# Define variables for directories and repositories
+CHEAT_REPO="https://github.com/andrewjkerr/security-cheatsheets.git"
+CHEAT_DIR="$HOME/cheatsheets"  # You can change this path as needed
+
+# Function to install cheat from GitHub (if not already done)
+install_cheat() {
+    echo "Installing cheat..."
+    # Check if cheat is already installed
+    if ! command -v cheat &>/dev/null; then
+        echo "Cheat is not installed. Installing..."
+        # Assuming you are using a package manager like apt or a Python-based installation method
+        sudo apt update
+        sudo apt install cheat -y
+    else
+        echo "Cheat is already installed."
+    fi
+}
+
+# Function to clone the security cheatsheets repo
+install_security_cheatsheets() {
+    echo "Cloning security cheatsheets repository..."
+    if [ ! -d "$CHEAT_DIR" ]; then
+        # Clone the cheat sheets repository if the directory doesn't exist
+        git clone "$CHEAT_REPO" "$CHEAT_DIR"
+        echo "Security cheatsheets cloned into $CHEAT_DIR."
+    else
+        echo "Security cheatsheets already exist in $CHEAT_DIR. Pulling the latest updates..."
+        # If the directory exists, pull the latest changes
+        cd "$CHEAT_DIR"
+        git pull origin main
+        cd -
+    fi
+}
+
+# Function to configure cheatsheets with the cheat command
+configure_cheat() {
+    echo "Configuring cheat to use the security cheatsheets..."
+    CHEAT_PATH="$CHEAT_DIR"
+    # You can customize the cheat config file or set the cheat directory as needed
+    # If the cheat tool supports an environment variable or config, set it here
+    export CHEAT_PATH
+    echo "CHEAT_PATH set to $CHEAT_PATH"
+}
+
+# Main script execution
+install_cheat
+install_security_cheatsheets
+configure_cheat
+
+echo "Installation and setup complete!"
 
 
 
