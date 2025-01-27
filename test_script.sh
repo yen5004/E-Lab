@@ -48,6 +48,9 @@ fi
 echo "Install log located at $folder/install_log - $(get_timestamp)" | tee -a $logg
 echo "Install log created, begin tracking - $(get_timestamp)" | tee -a $logg
 
+# Create log folder for logging commands
+mkdir -p ~/log
+
 # Open a new terminal to monitor install_log
 sudo apt install -y gnome-terminal
 echo "Opening new terminal to monitor install_log..."
@@ -76,7 +79,7 @@ function install_apt_tools() {
 }
 
 #list out tools for apt install below
-cmatrix cowsay htop above flameshot 
+cmatrix cowsay htop above flameshot bsdutils net-tools
 
 # Special install for cheat:
 cd $HOME
