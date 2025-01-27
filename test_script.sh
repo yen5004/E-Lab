@@ -76,7 +76,7 @@ function install_apt_tools() {
 }
 
 #list out tools for apt install below
-cmatrix cowsay htop
+cmatrix cowsay htop above flameshot 
 
 # Special install for cheat:
 cd $HOME
@@ -180,11 +180,12 @@ echo "Tmux-logging plugin installed - $(get_timestamp)" | tee -a $logg
 #echo "Installed Ciphey - $(get_timestamp)" | tee -a $logg
 #cd $git_folder
 
-## Start python install of updog
-#cd $git_folder
-#pip3 install updog
-#echo "Installed updog - $(get_timestamp)" | tee -a $logg
-#cd $git_folder
+# Start python install of updog
+cd $git_folder
+pip3 install updog
+echo "Installed updog - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Golang installs:
@@ -219,48 +220,68 @@ cd $git_folder
 sudo mkdir log && sudo chmod 777 log && cd log
 sudo touch cmd_logr_install.sh && sudo chmod 777 cmd_logr_install.sh
 cat << 'EOF' > cmd_logr_install.sh
-#Install logger script
+# Install logger script
+
+# Ensure the ~/log directory exists, create it if it doesn't
+mkdir -p ~/log
+
+# Adding metadata to .zshrc & .bashrc
 echo "###########_Custom Script Below_###########" | tee -a ~/.zshrc
 echo "Script created by Franco M." | tee -a ~/.zshrc
 echo "###########_Custom Script Below_###########" | tee -a ~/.bashrc
 echo "Script created by Franco M." | tee -a ~/.bashrc
 
-#Prompt username
+# Prompt username
 echo "Please enter your username"
 
-#Read user input 
+# Read user input 
 read -r name
 
 #Store username in the .zshrc
 echo "export NAME=$name" >> ~/.zshrc
-
-#Display time in terminal
-#echo 'RPROMPT="[%D{%m/%f/%Y}|%D{%L:%M}]"' >> ~/.zshrc
-echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.zshrc
-
-#Sent logs to a file with time stamp
-echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.zshrc
-
-#Confirm user is stored and display IP info and more
-echo "echo TED-User: '$name'" >> ~/.zshrc
-echo "ifconfig" >> ~/.zshrc
-echo "NOTE: Use EXIT to close Log Script" >> ~/.zshrc
-echo "NOTE: Use EXIT to close Log Script"
-echo 'echo $note' >> ~/.zshrc
-
-#Store username in the .bashrc
 echo "export NAME=$name" >> ~/.bashrc
-#echo 'RPROMPT="[%D{%m/%f/%Y}|%D{%L:%M}]"' >> ~/.bashrc
-echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.bashrc  
 
-#Sent logs to a file with time stamp
+##Display time in terminal
+##echo 'RPROMPT="[%D{%m/%f/%Y}|%D{%L:%M}]"' >> ~/.zshrc
+#echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.zshrc
+# Customize the right prompt (RPROMPT)   ###################
+echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.zshrc
+echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.bashrc
+
+# Log shell activity to a file with a timestamp (daily logs)
+echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.zshrc
 echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.bashrc
 
-#Confirm user is stored and display IP info and more
-echo "TED-User: '$name'" >> ~/.bashrc
+# Confirm user is stored and display IP info and more
+echo "User Name: '$name'" >> ~/.zshrc
+echo "echo User Name: '$name'" >> ~/.bashrc
+echo "ifconfig" >> ~/.zshrc
 echo "ifconfig" >> ~/.bashrc
-echo 'note="use exit to  close script"' >> ~/.bashrc
+echo "NOTE: Use EXIT to close Log Script" >> ~/.zshrc
+echo "NOTE: Use EXIT to close Log Script" >> ~/.bashrc
+echo 'echo $note' >> ~/.zshrc
 echo 'echo $note' >> ~/.bashrc
+
+# Store username in .bashrc and .zshrc
+echo "export NAME=$name" >> ~/.bashrc
+echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.bashrc
+echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.zshrc
+
+# Log shell activity with timestamp (daily logs)
+echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.bashrc
+echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.zshrc
+
+# Confirm user is stored and display IP info
+echo "TED-User: '$name'" >> ~/.bashrc
+echo "TED-User: '$name'" >> ~/.zshrc
+echo "ifconfig" >> ~/.bashrc
+echo "ifconfig" >> ~/.zshrc
+
+# Closing message
+echo 'note="use exit to close script"' >> ~/.bashrc
+echo 'note="use exit to close script"' >> ~/.zshrc
+echo 'echo $note' >> ~/.bashrc
+echo 'echo $note' >> ~/.zshrc
 echo "Command logger install complete"
 echo "cmd_logr_install.sh finished!"
 
