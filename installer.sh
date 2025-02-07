@@ -76,7 +76,7 @@ function install_apt_tools() {
 }
 
 #list out tools for apt install below
-install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cowsay htop
+install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cowsay htop above
 
 # Special install for cheat:
 cd $HOME
@@ -132,6 +132,14 @@ repo_urls=(
 "https://github.com/SnaffCon/Snaffler.git"
 "https://github.com/0dayCTF/reverse-shell-generator.git"
 "https://github.com/sc0tfree/updog.git"
+"https://github.com/yen5004/netmask_listr.git"
+"https://github.com/yen5004/simple_webpage.git"
+"https://github.com/yen5004/reverse-shell-generator.git"
+
+
+
+
+
 ""
 )
 
