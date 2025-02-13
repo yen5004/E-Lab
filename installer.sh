@@ -54,24 +54,55 @@ echo "Opening new terminal to monitor install_log..."
 gnome-terminal --window --profile=AI -- bash -c "watch -n .5 tail -f $logg"
 sleep 3
 
-# Update and upgrade machine ########
-###echo "Start machine update & full upgrade - $(get_timestamp)" >> $logg
-#sudo apt update -y && sudo apt upgrade -y #for normal updates
-#sudo apt update -y && sudo apt full-upgrade -y #everything upgrade
-###echo "Finish machine update & full upgrade - $(get_timestamp)" >> $logg
+# Update and upgrade options && Prompt user for action
+echo "Select an option:"
+echo "1. Perform sudo apt update and upgrade"
+echo "2. Upgrade to kali-everything package"
+echo "3. Just install tools"
+read -p "Enter your choice [1-3]: " choice
+
+case $choice in
+    1)
+        echo "Start machine update & upgrade - $(get_timestamp)" | tee -a $logg
+        sudo apt update -y && sudo apt upgrade -y
+        echo "Finish machine update & upgrade - $(get_timestamp)" | tee -a $logg
+        ;;
+    2)
+        echo "Start machine update & full upgrade (kali-everything) - $(get_timestamp)" | tee -a $logg
+        sudo apt update -y && sudo apt full-upgrade -y
+        echo "Finish machine update & full upgrade (kali-everything) - $(get_timestamp)" | tee -a $logg
+        ;;
+    3)
+        echo "Proceeding to install tools only - $(get_timestamp)" | tee -a $logg
+        ;;
+    *)
+        echo "Invalid choice. Exiting."
+        ;;
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+echo "       1"  | tee -a $logg
+echo "      111" | tee -a $logg
+echo "     11111"| tee -a $logg
+echo "      111" | tee -a $logg
+echo "       1"  | tee -a $logg
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 # apt installs:
+echo "Begin APT installs..." | tee -a $logg
 
 cd $HOME
 function install_apt_tools() {
-	echo "starting install of apt tools"
- 	for tool in $@; do
-		if ! dpkg -l | grep -q "^ii $tool"; then
-			sudo apt install -y "$tool" && echo "Installed apt $tool - $(get_timestamp)" | tee -a $logg
-	else
-		echo "Tool $tool is already installed. $(get_timestamp)" | tee -a $logg
-	fi
+    echo "Starting install of apt tools"
+    for tool in $@; do
+        if ! dpkg -l | grep -q "^ii $tool"; then
+            if sudo apt install -y "$tool"; then
+                echo "Installed apt $tool - $(get_timestamp)" | tee -a $logg
+            else
+                echo "Failed to install apt $tool - $(get_timestamp)" | tee -a $logg
+            fi
+        else
+            echo "Tool $tool is already installed. $(get_timestamp)" | tee -a $logg
+        fi
     done
 }
 
@@ -81,7 +112,7 @@ install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nod
 # Special install for cheat:
 cd $HOME
 
-#Check if the 'cheat' tool is installed, and install it if not
+# Check if the 'cheat' tool is installed, and install it if not
 echo "Checking install status of 'cheat' tool"
 if ! command -v cheat >/dev/null 2>&1; then
     echo "Installing 'cheat'"
@@ -98,25 +129,24 @@ else
     echo "Tool 'cheat' is already installed. $(get_timestamp)" | tee -a $logg
 fi
 
-#Check if the 'MinIO' tool is installed, and install it if not
+# Check if the 'MinIO' tool is installed, and install it if not
 echo "Checking install status of 'MinIO' tool"
-if ! command -v MinIO >/dev/null 2>&1; then
+if ! command -v minio >/dev/null 2>&1; then
     echo "Installing 'MinIO'"
-    cd ~/$project \
-    && sudo mkdir minio_folder \
-    && cd ~/$project/minio_folder \
-    && wget https://dl.min.io/server/minio/release/linux-amd64/minio \
-    && sudo chmod +x minio \
-    && cd ~
-    echo "Installed 'MinIO' - $(get_timestamp)" | tee -a $logg
+    if cd ~/"$project" && sudo mkdir -p minio_folder && cd ~/"$project"/minio_folder; then
+        if wget https://dl.min.io/server/minio/release/linux-amd64/minio && sudo chmod +x minio; then
+            echo "Installed 'MinIO' - $(get_timestamp)" | tee -a $logg
+        else
+            echo "Failed to download or set permissions for 'MinIO' - $(get_timestamp)" | tee -a $logg
+        fi
+    else
+        echo "Failed to create or navigate to the directory - $(get_timestamp)" | tee -a $logg
+    fi
 else
     echo "Tool 'MinIO' is already installed. $(get_timestamp)" | tee -a $logg
 fi
 
-
-
-
-
+echo "Finished APT installs..." | tee -a $logg
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Check to see if "gitlab" folder exists in project directory and if not creates one
@@ -136,8 +166,6 @@ cd $git_folder
 # Download the following gitlab repos:
 repo_urls=(
 # List of GitLab reps urls:
-"https://github.com/frizb/MSF-Venom-Cheatsheet.git"
-"https://github.com/swisskyrepo/PayloadsAllTheThings.git"
 "https://github.com/andrewjkerr/security-cheatsheets.git"
 "https://github.com/cheat/cheat.git"
 "https://github.com/itm4n/PrivescCheck.git"
@@ -148,7 +176,6 @@ repo_urls=(
 "https://github.com/tmux-plugins/tpm.git"
 "https://github.com/tmux-plugins/list.git"
 "https://github.com/SnaffCon/Snaffler.git"
-"https://github.com/0dayCTF/reverse-shell-generator.git"
 "https://github.com/sc0tfree/updog.git"
 "https://github.com/yen5004/netmask_listr.git"
 "https://github.com/yen5004/simple_webpage.git"
@@ -177,7 +204,7 @@ repo_urls=(
 "https://github.com/yen5004/THM-Lateral-Movement-and-Pivoting.git"
 "https://github.com/yen5004/2025_cmd_logr.git"
 "https://github.com/yen5004/netmask_listr.git"
-"https://github.com/yen5004/Seatbelt.git"
+
 ""
 
 
@@ -204,6 +231,7 @@ for repo_url in "${repo_urls[@]}"; do
   	echo "Repo $repo_name already cloned at $git_folder/$repo_name. - $(get_timestamp)" | tee -a $logg
   fi 
 done
+cd ~
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Special Git installs:
@@ -296,7 +324,6 @@ echo "Installed Flamingo at: $git_folder/flamingo - $(get_timestamp)" | tee -a $
 
 ###############################
 # Install command logger
-# Special install for 2025_cmd_logr:
 echo "Installing 2025_cmd_logr ..."
 cd $git_folder/2025_cmd_logr
 sudo chmod 777 cmd_logr_install.sh
