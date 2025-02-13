@@ -170,12 +170,15 @@ repo_urls=(
 "https://github.com/yen5004/LaZagne.git"
 "https://github.com/yen5004/LOLBAS.git"
 "https://github.com/yen5004/1-liner-keep-alive.git"
+"https://github.com/yen5004/pingr.git"
+"https://github.com/yen5004/spinners.git"
+"https://github.com/yen5004/THM_Shells.git"
+"https://github.com/yen5004/THM_ENUM.git"
+"https://github.com/yen5004/THM-Lateral-Movement-and-Pivoting.git"
+"https://github.com/yen5004/2025_cmd_logr.git"
+"https://github.com/yen5004/netmask_listr.git"
 ""
 ""
-""
-""
-""
-
 
 
 
@@ -226,6 +229,8 @@ echo "Tmux-logging plugin installed - $(get_timestamp)" | tee -a $logg
 #    echo "CyberChef is already installed - $(get_timestamp)" | tee -a $logg
 #    cd $git_folder
 #fi
+
+
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Python installs
@@ -291,62 +296,15 @@ echo "Installed Flamingo at: $git_folder/flamingo - $(get_timestamp)" | tee -a $
 
 ###############################
 # Install command logger
-
+# Special install for 2025_cmd_logr:
+echo "Installing 2025_cmd_logr ..."
+cd $git_folder/2025_cmd_logr
+sudo chmod 777 cmd_logr_install.sh
+bash cmd_logr_install.sh
+echo "Installed 2025_cmd_logr/cmd_logr_install at: $PWD - $(get_timestamp)" | tee -a $logg
 cd $git_folder
-sudo mkdir log && sudo chmod 777 log && cd log
-sudo touch cmd_logr_install.sh && sudo chmod 777 cmd_logr_install.sh
-cat << 'EOF' > cmd_logr_install.sh
-#Install logger script
-echo "###########_Custom Script Below_###########" | tee -a ~/.zshrc
-echo "Script created by Franco M." | tee -a ~/.zshrc
-echo "###########_Custom Script Below_###########" | tee -a ~/.bashrc
-echo "Script created by Franco M." | tee -a ~/.bashrc
-
-#Prompt username
-echo "Please enter your username"
-
-#Read user input 
-read -r name
-
-#Store username in the .zshrc
-echo "export NAME=$name" >> ~/.zshrc
-
-#Display time in terminal
-#echo 'RPROMPT="[%D{%m/%f/%Y}|%D{%L:%M}]"' >> ~/.zshrc
-echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.zshrc
-
-#Sent logs to a file with time stamp
-echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.zshrc
-
-#Confirm user is stored and display IP info and more
-echo "echo TED-User: '$name'" >> ~/.zshrc
-echo "ifconfig" >> ~/.zshrc
-echo "NOTE: Use EXIT to close Log Script" >> ~/.zshrc
-echo "NOTE: Use EXIT to close Log Script"
-echo 'echo $note' >> ~/.zshrc
-
-#Store username in the .bashrc
-echo "export NAME=$name" >> ~/.bashrc
-#echo 'RPROMPT="[%D{%m/%f/%Y}|%D{%L:%M}]"' >> ~/.bashrc
-echo 'RPROMPT="[%D{%d%b%Y}|%D{%L:%M}]"' >> ~/.bashrc  
-
-#Sent logs to a file with time stamp
-echo 'test "$(ps -ocommand= -p $PPID | awk '\''{print $1}'\'')" == '\''script'\'' || (script -a -f $HOME/log/$(date +"%F")_shell.log)' >> ~/.bashrc
-
-#Confirm user is stored and display IP info and more
-echo "TED-User: '$name'" >> ~/.bashrc
-echo "ifconfig" >> ~/.bashrc
-echo 'note="use exit to  close script"' >> ~/.bashrc
-echo 'echo $note' >> ~/.bashrc
-echo "Command logger install complete"
-echo "cmd_logr_install.sh finished!"
-
-EOF
-
-echo "Copied 'cmd_logr_install.sh' at: $PWD - $(get_timestamp)" | tee -a $logg
-./cmd_logr_install.sh
-echo "Installed 'cmd_logr_install.sh' at: $PWD - $(get_timestamp)" | tee -a $logg
-cd $git_folder
+source ~/.bashrc
+source ~/.zshrc
 
 ################
 # Install More_dots bashrc/zshrc custom dot files
