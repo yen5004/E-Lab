@@ -122,12 +122,20 @@ if ! command -v cheat >/dev/null 2>&1; then
     && sudo chmod +x cheat-linux-amd64 \
     && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
     echo "Installed 'cheat' - $(get_timestamp)" | tee -a $logg
+
+    # Add /usr/local/bin to PATH
+    if ! echo $PATH | grep -q "/usr/local/bin"; then
+        export PATH=$PATH:/usr/local/bin
+        echo "Added /usr/local/bin to PATH - $(get_timestamp)" | tee -a $logg
+    fi
+
     echo "Setting up cheat for the first time, standby..."
     yes | cheat scp
     echo "Set up of 'cheat' complete at: /usr/local/bin/cheat - $(get_timestamp)" | tee -a $logg
 else
     echo "Tool 'cheat' is already installed. $(get_timestamp)" | tee -a $logg
 fi
+
 
 # Check if the 'MinIO' tool is installed, and install it if not
 echo "Checking install status of 'MinIO' tool"
