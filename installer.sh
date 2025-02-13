@@ -122,8 +122,6 @@ function install_apt_tools() {
     done
 }
 
-echo "Begin APT installs..." | tee -a $logg
-
 cd $HOME
 
 #list out tools for apt install below
