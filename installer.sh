@@ -78,6 +78,7 @@ case $choice in
     *)
         echo "Invalid choice. Exiting."
         ;;
+esac
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 echo "       1"  | tee -a $logg
