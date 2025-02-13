@@ -76,7 +76,7 @@ function install_apt_tools() {
 }
 
 #list out tools for apt install below
-install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cowsay htop above
+install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cowsay htop above sliver
 
 # Special install for cheat:
 cd $HOME
@@ -88,7 +88,7 @@ if ! command -v cheat >/dev/null 2>&1; then
     cd /tmp \
     && wget https://github.com/cheat/cheat/releases/download/4.4.2/cheat-linux-amd64.gz \
     && gunzip cheat-linux-amd64.gz \
-    && chmod +x cheat-linux-amd64 \
+    && sudo chmod +x cheat-linux-amd64 \
     && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
     echo "Installed 'cheat' - $(get_timestamp)" | tee -a $logg
     echo "Setting up cheat for the first time, standby..."
@@ -97,6 +97,24 @@ if ! command -v cheat >/dev/null 2>&1; then
 else
     echo "Tool 'cheat' is already installed. $(get_timestamp)" | tee -a $logg
 fi
+
+#Check if the 'MinIO' tool is installed, and install it if not
+echo "Checking install status of 'MinIO' tool"
+if ! command -v MinIO >/dev/null 2>&1; then
+    echo "Installing 'MinIO'"
+    cd ~/$project \
+    && sudo mkdir minio_folder \
+    && cd ~/$project/minio_folder \
+    && wget https://dl.min.io/server/minio/release/linux-amd64/minio
+    && sudo chmod +x minio \
+    && cd ~
+    echo "Installed 'MinIO' - $(get_timestamp)" | tee -a $logg
+else
+    echo "Tool 'MinIO' is already installed. $(get_timestamp)" | tee -a $logg
+fi
+
+
+
 
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -135,7 +153,28 @@ repo_urls=(
 "https://github.com/yen5004/netmask_listr.git"
 "https://github.com/yen5004/simple_webpage.git"
 "https://github.com/yen5004/reverse-shell-generator.git"
-
+"https://github.com/yen5004/UART-Hacking.git"
+"https://github.com/yen5004/Seatbelt.git"
+"https://github.com/yen5004/cyber_plumbers_handbook_lab_info.git"
+"https://github.com/yen5004/bashscan.git"
+"https://github.com/yen5004/awesome-pentest-cheat-sheets.git"
+"https://github.com/yen5004/Bash-Oneliner.git"
+"https://github.com/yen5004/uptux.git"
+"https://github.com/yen5004/cipherscan.git"
+"https://github.com/yen5004/PayloadsAllTheThings.git"
+"https://github.com/yen5004/MSF-Venom-Cheatsheet.git"
+"https://github.com/yen5004/sliver.git"
+"https://github.com/yen5004/webshells.git"
+"https://github.com/yen5004/pupy.git"
+"https://github.com/yen5004/vim-cheat-sheet.git"
+"https://github.com/yen5004/LaZagne.git"
+"https://github.com/yen5004/LOLBAS.git"
+"https://github.com/yen5004/1-liner-keep-alive.git"
+""
+""
+""
+""
+""
 
 
 
@@ -201,6 +240,24 @@ echo "Tmux-logging plugin installed - $(get_timestamp)" | tee -a $logg
 cd $git_folder
 pip3 install updog
 echo "Installed updog - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+
+# Start python install of UART-Hacking
+cd $git_folder
+pip3 install pyserial
+pip3 install dbus-python
+cd UART-Hacking
+echo "This is working directory: " pwd
+pip3 install -r requirements.txt
+echo "Installed UART-Hacking - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+
+# Start python install of LaZagne
+cd $git_folder
+cd LaZagne
+echo "This is working directory: " pwd
+pip3 install -r requirements.txt
+echo "Installed LaZagne - $(get_timestamp)" | tee -a $logg
 cd $git_folder
 
 
