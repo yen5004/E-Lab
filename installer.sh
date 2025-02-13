@@ -91,20 +91,37 @@ echo "       1"  | tee -a $logg
 echo "Begin APT installs..." | tee -a $logg
 
 cd $HOME
+# Function to get the version of the tool dynamically
+get_tool_version() {
+    command -v $1 >/dev/null 2>&1 || { echo "Tool $1 not found"; return; }
+
+    version=$($1 --version 2>/dev/null || $1 -v 2>/dev/null || $1 version 2>/dev/null || echo "Version info not available")
+    echo "$version"
+}
+
+# Function to install apt tools
 function install_apt_tools() {
     echo "Starting install of apt tools"
     for tool in $@; do
         if ! dpkg -l | grep -q "^ii $tool"; then
             if sudo apt install -y "$tool"; then
                 echo "Installed apt $tool - $(get_timestamp)" | tee -a $logg
+                tool_version=$(get_tool_version $tool)
+                echo "Version of $tool: $tool_version - $(get_timestamp)" | tee -a $logg
             else
                 echo "Failed to install apt $tool - $(get_timestamp)" | tee -a $logg
             fi
         else
             echo "Tool $tool is already installed. $(get_timestamp)" | tee -a $logg
+            tool_version=$(get_tool_version $tool)
+            echo "Version of $tool: $tool_version - $(get_timestamp)" | tee -a $logg
         fi
     done
 }
+
+echo "Begin APT installs..." | tee -a $logg
+
+cd $HOME
 
 #list out tools for apt install below
 install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver
