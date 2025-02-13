@@ -81,11 +81,13 @@ case $choice in
 esac
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+echo "        "  | tee -a $logg
 echo "       1"  | tee -a $logg
 echo "      111" | tee -a $logg
 echo "     11111"| tee -a $logg
 echo "      111" | tee -a $logg
 echo "       1"  | tee -a $logg
+echo "        "  | tee -a $logg
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # apt installs:
