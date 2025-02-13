@@ -177,7 +177,7 @@ repo_urls=(
 "https://github.com/yen5004/THM-Lateral-Movement-and-Pivoting.git"
 "https://github.com/yen5004/2025_cmd_logr.git"
 "https://github.com/yen5004/netmask_listr.git"
-""
+"https://github.com/yen5004/Seatbelt.git"
 ""
 
 
