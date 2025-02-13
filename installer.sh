@@ -76,7 +76,7 @@ function install_apt_tools() {
 }
 
 #list out tools for apt install below
-install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cowsay htop above sliver
+install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver
 
 # Special install for cheat:
 cd $HOME
@@ -105,7 +105,7 @@ if ! command -v MinIO >/dev/null 2>&1; then
     cd ~/$project \
     && sudo mkdir minio_folder \
     && cd ~/$project/minio_folder \
-    && wget https://dl.min.io/server/minio/release/linux-amd64/minio
+    && wget https://dl.min.io/server/minio/release/linux-amd64/minio \
     && sudo chmod +x minio \
     && cd ~
     echo "Installed 'MinIO' - $(get_timestamp)" | tee -a $logg
