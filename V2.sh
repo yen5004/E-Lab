@@ -135,7 +135,7 @@ function install_apt_tools() {
 }
 
 # List out tools for apt install below
-install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver wget hashcat cherrytree responder unzip python3-pip pipx grip pandoc markdown
+install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver wget hashcat cherrytree responder unzip python3-pip pipx grip pandoc markdown trivy
 
 echo "Finished APT installs..." | tee -a $logg
 
@@ -150,13 +150,31 @@ repo_urls=(
 "https://github.com/yen5004/ZIP_TAR.git"
 "https://github.com/kubescape/kubescape.git"
 "https://github.com/octarinesec/kube-scan.git"
+"https://github.com/aquasecurity/trivy.git"
+"https://github.com/aquasecurity/trivy-test-images.git"
+"https://github.com/aquasecurity/trivy-action.git"
+"https://github.com/aquasecurity/trivy-schemas.git"
+"https://github.com/aquasecurity/helm-charts.git"
+"https://github.com/aquasecurity/trivy-repo.git"
+"https://github.com/aquasecurity/traceeshark.git"
+"https://github.com/aquasecurity/docker-bench.git"
+"https://github.com/aquasecurity/linux-bench.git"
+"https://github.com/aquasecurity/trivy-plugin-aqua.git"
+"https://github.com/aquasecurity/k8s-node-collector.git"
+"https://github.com/aquasecurity/aqua-helm.git"
+"https://github.com/aquasecurity/trivy-db.git"
+"https://github.com/aquasecurity/vexhub.git"
+"https://github.com/aquasecurity/trivy-test-repo.git"
+"https://github.com/aquasecurity/vuln-list-aqua.git"
+"https://github.com/aquasecurity/harbor-scanner-aqua.git"
+"https://github.com/kubernetes-sigs/cve-feed-osv.git"
+"https://github.com/aquasecurity/testdocker.git"
+"https://github.com/kubernetes-sigs/krew.git"
 ""
-""
+
 "https://github.com/andrewjkerr/security-cheatsheets.git"
 "https://github.com/cheat/cheat.git"
-""
 "https://github.com/peass-ng/PEASS-ng.git"
-""
 "https://github.com/tmux-plugins/tmux-logging.git"
 "https://github.com/yen5004/cheat_helper.git"
 "https://github.com/tmux-plugins/tpm.git"
@@ -208,6 +226,90 @@ done
 ###########
 #########
 ########
+
+# check to see if "Golang_folder" folder exisits in $git_folder and if not creates one
+if [ ! -d "go_folder" ]; then
+	echo "Golang_folder not found. Creating..."
+	sudo mkdir -p "$go_folder" && sudo chmod 777 "$go_folder" && cd "$go_folder" || exit 1
+	echo "Golang_folder created at: $PWD - $(get_timestamp)" | tee -a $logg
+ 	cd $gofolder
+else
+	echo "Golang_folder already exists at: $PWD - $(get_timestamp)" | tee -a $logg
+ 	cd $gofolder
+fi
+
+# Golang install
+
+sudo apt install -y curl tar
+
+# Download and install Go (latest version)
+GO_VERSION="1.20.3"  # You can change this to any desired version
+GO_TAR_FILE="go${GO_VERSION}.linux-amd64.tar.gz"
+
+# Download Go binary tarball
+curl -LO "https://golang.org/dl/${GO_TAR_FILE}"
+
+# Verify download
+if [ $? -ne 0 ]; then
+    echo "Failed to download Go. Exiting..."
+    exit 1
+fi
+
+# Extract the tarball to /usr/local
+sudo tar -C /usr/local -xzf "${GO_TAR_FILE}"
+
+# Remove the tarball after extraction
+rm "${GO_TAR_FILE}"
+
+# Set up Go environment variables
+echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
+echo "export GOPATH=\$HOME/go" >> ~/.bashrc
+echo "export GOROOT=/usr/local/go" >> ~/.bashrc
+
+# Reload .bashrc to apply the changes
+source ~/.bashrc
+
+# Verify Go installation
+go version
+
+
+# Special install for Flamingo:
+cd $git_folder
+go get -u -v github.com/atredispartners/flamingo
+#sudo chmod 777 flamingo && cd flamingo
+go install -v github.com/atredispartners/flamingo
+echo "Installed Flamingo at: $git_folder/flamingo - $(get_timestamp)" | tee -a $logg
+
+
+###############################
+# Install command logger
+echo "Installing 2025_cmd_logr ..."
+cd $git_folder/2025_cmd_logr
+sudo chmod 777 cmd_logr_install.sh
+bash cmd_logr_install.sh
+echo "Installed 2025_cmd_logr/cmd_logr_install at: $PWD - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+source ~/.bashrc
+source ~/.zshrc
+
+################
+# Install More_dots bashrc/zshrc custom dot files
+cd $git_folder
+cd More_dots
+sudo chmod 777 add_aliases.sh
+./add_aliases.sh
+echo "Installed 'add_aliases.sh' at: $PWD - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+
+################
+# Install cheat_helper personalized cheats
+cd $git_folder
+cd cheat_helper
+sudo chmod 777 personal_cheatsheets.sh
+./personal_cheatsheets.sh
+echo "Installed 'personal_cheatsheets.sh' at: $PWD - $(get_timestamp)" | tee -a $logg
+cd $git_folder
+
 
 # Install and prepare pipx
 echo "installing pipx - $(get_timestamp)" | tee -a $logg
@@ -261,12 +363,70 @@ wget "$pstools_url" -O PSTools.zip || echo "FAILED TO DOWNLOAD PSTOOLS - $(get_t
 unzip PSTools.zip
 echo "PsTools download and extraction completed!" | tee -a $logg
 
-# Download SharpHound.exe
+# Download trivy
 cd "$folder"
-sharphound_url="https://github.com/SpecterOps/SharpHound/releases/latest/download/SharpHound.exe"
-sharphound_folder="$folder/SharpHound_exe"
-mkdir -p "$sharphound_folder"
-cd "$sharphound_folder"
-wget "$sharphound_url" -O SharpHound.exe || echo "FAILED TO DOWNLOAD SHARPHOUND.EXE - $(get_timestamp)" | tee -a $logg
-echo "SharpHound.exe download completed!" | tee -a $logg
+docker pull ghcr.io/aquasecurity/trivy:canary
 
+# Download Helm
+cd "$folder"
+curl -L https://git.io/get_helm.sh | bash
+helm init
+helm repo add aquasecurity https://aquasecurity.github.io/helm-charts/
+helm repo update
+helm search repo aquasecurity -l
+
+# download trivy-repo
+$ sudo apt-get install wget apt-transport-https gnupg
+$ wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+$ echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+$ sudo apt-get update
+$ sudo apt-get install trivy
+
+outfile=$(mktemp) && curl -s "https://raw.githubusercontent.com/aquasecurity/traceeshark/main/autoinstall.py" > $outfile && python3 $outfile && rm $outfile
+pip3 install paramiko msgpack python-pcapng
+
+# Docker-bench
+go get github.com/aquasecurity/docker-bench
+cd $GOPATH/src/github.com/aquasecurity/docker-bench
+go build -o docker-bench .
+
+# See all supported options
+./docker-bench --help
+
+# Run checks
+./docker-bench
+
+# Run checks for specified Docker version
+./docker-bench --version 18.09
+
+# Run checks for specified cis Benchmark 
+./docker-bench --benchmark cis-1.2
+
+#linux bench
+go get github.com/aquasecurity/linux-bench
+cd $GOPATH/src/github.com/aquasecurity/linux-bench
+go build -o linux-bench .
+
+# See all supported options
+./linux-bench --help
+
+# Run checks
+./linux-bench
+
+# Run checks for specified linux cis version
+./linux-bench --version <version>
+
+
+# k8s node collector
+cd "$folder"
+git clone git@github.com:aquasecurity/k8s-node-collector.git
+cd k8s-node-collector/cmd/node-collector
+GOOS=linux GOARCH=arm64 go build -o node-collector main.go
+
+# trivy db
+wget https://github.com/aquasecurity/vexhub/archive/refs/heads/main.zip -O trivyDB_mai.zip
+wget https://github.com/aquasecurity/vexhub/blob/main/vex-repository.json. -O Manifest.json
+
+wget https://github.com/kubernetes-sigs/krew/releases/download/v0.4.5/krew-darwin_amd64.tar.gz -) krew_install.tar.gz
+
+kubectl krew install who-can
