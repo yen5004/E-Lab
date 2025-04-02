@@ -135,7 +135,7 @@ function install_apt_tools() {
 }
 
 # List out tools for apt install below
-install_apt_tools flameshot talk talkd pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver wget hashcat cherrytree responder unzip python3-pip pipx grip pandoc markdown trivy
+install_apt_tools flameshot pwncat openssl osslsigncode mingw-w64 nodejs npm nim cmake golang cmatrix cmatrix-xfont cowsay htop above sliver wget hashcat cherrytree responder unzip python3-pip pipx grip pandoc markdown trivy
 
 echo "Finished APT installs..." | tee -a $logg
 
@@ -171,7 +171,6 @@ repo_urls=(
 "https://github.com/aquasecurity/testdocker.git"
 "https://github.com/kubernetes-sigs/krew.git"
 ""
-
 "https://github.com/andrewjkerr/security-cheatsheets.git"
 "https://github.com/cheat/cheat.git"
 "https://github.com/peass-ng/PEASS-ng.git"
@@ -427,6 +426,6 @@ GOOS=linux GOARCH=arm64 go build -o node-collector main.go
 wget https://github.com/aquasecurity/vexhub/archive/refs/heads/main.zip -O trivyDB_mai.zip
 wget https://github.com/aquasecurity/vexhub/blob/main/vex-repository.json. -O Manifest.json
 
-wget https://github.com/kubernetes-sigs/krew/releases/download/v0.4.5/krew-darwin_amd64.tar.gz -) krew_install.tar.gz
+wget https://github.com/kubernetes-sigs/krew/releases/download/v0.4.5/krew-darwin_amd64.tar.gz -O krew_install.tar.gz
 
 kubectl krew install who-can
